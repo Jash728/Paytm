@@ -1,5 +1,5 @@
 const zod = require("zod");
-const { User } = require("../db");
+const { User, Account } = require("../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const bcrypt = require("bcrypt");
@@ -38,6 +38,13 @@ const signUp = async (req, res) => {
   });
 
   const userId = user._id;
+
+
+  
+  await Account.create({
+    userId,
+    balance : 1 + Math.random()*10000
+  })
 
   const token = jwt.sign(
     {
