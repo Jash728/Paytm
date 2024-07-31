@@ -91,6 +91,7 @@ const signIn = async (req, res) => {
 
       res.json({
         token: token,
+        user: user.firstName
       });
       return;
     }
