@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from 'react-redux';
+
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const name = searchParams.get("name");
   const [amount, setAmount] = useState(0);
+
+  const userInfoString = useSelector((store) => store.userInfo);
+  const userInfo = userInfoString ? JSON.parse(userInfoString) : null; // Parse the JSON string
+  const token = userInfo ? userInfo.token : null;
 
   const handleTransfer = async() => {
     // const token = JSON.parse(localStorage.getItem('signedInUser')).token;
@@ -15,7 +21,7 @@ const SendMoney = () => {
         amount
     },{
         headers: {
-            Authorization: "Bearer " + JSON.parse(localStorage.getItem('signedInUser')).token
+            Authorization: "Bearer " + token
         }
     }
 

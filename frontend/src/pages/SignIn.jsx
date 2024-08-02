@@ -6,11 +6,15 @@ import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { storeUserInfo } from "../utils/userSlice";
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -27,7 +31,8 @@ const SignIn = () => {
       }
     );
 
-    localStorage.setItem("signedInUser", JSON.stringify(response.data));
+    // localStorage.setItem("signedInUser", JSON.stringify(response.data));
+    dispatch(storeUserInfo(JSON.stringify(response.data)))
     navigate("/dashboard");
     alert("signedin");
   };

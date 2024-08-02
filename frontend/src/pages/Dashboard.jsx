@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { AppBar } from '../components/AppBar';
 import { Balance } from '../components/Balance';
 import Users from '../components/Users';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
   const [balance, setBalance] = useState(null);
   const [error, setError] = useState(null);
-    
-    // console.log(token);
+
+  const userInfoString = useSelector((store) => store.userInfo);
+  const userInfo = userInfoString ? JSON.parse(userInfoString) : null; // Parse the JSON string
+  const token = userInfo ? userInfo.token : null;
+  console.log(userInfo);
+  
   const getBalance = async () => {
-    const token = JSON.parse(localStorage.getItem('signedInUser')).token;
+    // const token = JSON.parse(localStorage.getItem('signedInUser')).token;
+   
     try {
       const response = await fetch("http://localhost:3000/api/v1/account/balance", {
         method: 'GET',
@@ -39,6 +45,7 @@ const Dashboard = () => {
       <AppBar />
       <div className="p-4">
         <div className="m-8">
+
             <Balance value={Math.floor(balance)} />
             <Users/>
         </div>

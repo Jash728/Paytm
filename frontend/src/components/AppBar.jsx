@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from './Button';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export const AppBar = () => {
   const [username, setUsername] = useState('');
     const navigate = useNavigate();
+    const userInfoString = useSelector((store) => store.userInfo);
+  const userInfo = userInfoString ? JSON.parse(userInfoString) : null; // Parse the JSON string
+  const usern = userInfo ? userInfo.user : null;
   useEffect(() => {
-    const storedUser = localStorage.getItem('signedInUser');
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUsername(parsedUser.user);
-    }
+    
+  setUsername(usern);
+   
   }, []);
 
   const handleLogout = () => {
