@@ -17,7 +17,7 @@ const SendMoney = () => {
   const handleTransfer = async () => {
     try {
       await axios.post(
-        "http://localhost:3000/api/v1/account/transfer",
+        "https://paytm-yuzv.onrender.com/api/v1/account/transfer",
         {
           to: id,
           amount,

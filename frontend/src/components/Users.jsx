@@ -11,7 +11,7 @@ const Users = () => {
   const token = userInfo ? userInfo.token : null;
   useEffect(() => {
     
-    axios.get("http://localhost:3000/api/v1/user/bulk?filter=" + filter , {
+    axios.get("https://paytm-yuzv.onrender.com/api/v1/user/bulk?filter=" + filter , {
         headers: {
           'Authorization': `Bearer ${token}` // Ensure yourToken is valid
         }})

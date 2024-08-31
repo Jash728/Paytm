@@ -16,7 +16,7 @@ const Dashboard = () => {
     // const token = JSON.parse(localStorage.getItem('signedInUser')).token;
    
     try {
-      const response = await fetch("http://localhost:3000/api/v1/account/balance", {
+      const response = await fetch("https://paytm-yuzv.onrender.com/api/v1/account/balance", {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
