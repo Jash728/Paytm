@@ -8,6 +8,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { storeUserInfo } from "../utils/userSlice";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
@@ -18,23 +19,28 @@ const SignIn = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const response = await axios.post(
-      "http://localhost:3000/api/v1/user/signin",
-      {
-        username,
-        password,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/signin",
+        {
+          username,
+          password,
         },
-      }
-    );
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    // localStorage.setItem("signedInUser", JSON.stringify(response.data));
-    dispatch(storeUserInfo(JSON.stringify(response.data)))
-    navigate("/dashboard");
-    alert("signedin");
+      // Store user info and navigate to the dashboard
+      dispatch(storeUserInfo(JSON.stringify(response.data)));
+      navigate("/dashboard");
+      toast.success("Signed in successfully!");
+    } catch (error) {
+      // Show error notification
+      toast.error("User not found or wrong credentials!");
+    }
   };
 
   return (
@@ -43,9 +49,7 @@ const SignIn = () => {
         <div className="rounded-lg bg-white w-100 text-center p-4 h-max px-8">
           <div className=" mb-5">
             <Heading label={"Sign in"} />
-            <SubHeading
-              label={"Enter your credentials to access your account"}
-            />
+            <SubHeading label={"Enter your credentials to access your account"} />
           </div>
           <InputBox
             onChange={(e) => {
@@ -58,6 +62,7 @@ const SignIn = () => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            type="password"
             placeholder="123456"
             label={"Password"}
           />

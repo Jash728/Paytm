@@ -1,36 +1,49 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from 'react-redux';
-
+import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const name = searchParams.get("name");
   const [amount, setAmount] = useState(0);
-
+  const navigate = useNavigate()
   const userInfoString = useSelector((store) => store.userInfo);
   const userInfo = userInfoString ? JSON.parse(userInfoString) : null; // Parse the JSON string
   const token = userInfo ? userInfo.token : null;
 
-  const handleTransfer = async() => {
-    // const token = JSON.parse(localStorage.getItem('signedInUser')).token;
-    axios.post("http://localhost:3000/api/v1/account/transfer", {
-        to:id,
-        amount
-    },{
-        headers: {
-            Authorization: "Bearer " + token
+  const handleTransfer = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3000/api/v1/account/transfer",
+        {
+          to: id,
+          amount,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
         }
+      );
+      toast.success("Transferred successfully!");
+      // navigate("/dashboard");
+    } catch (error) {
+    
+      if (error.response && error.response.status === 400) {
+        toast.error("Not sufficient balance or transfer failed!");
+      } else {
+        toast.error("Something went wrong in transfer.");
+      }
     }
-
-)
-alert("Transfered")
   };
 
   return (
     <div className="flex justify-center h-screen bg-gray-100">
+      <ToastContainer /> {/* Add ToastContainer to render toasts */}
       <div className="h-full flex flex-col justify-center">
         <div className="border h-min text-card-foreground max-w-md p-4 space-y-8 w-96 bg-white shadow-lg rounded-lg">
           <div className="flex flex-col space-y-1.5 p-6">
@@ -49,7 +62,7 @@ alert("Transfered")
               <div className="space-y-2">
                 <label
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  for="amount"
+                  htmlFor="amount" // Corrected attribute from 'for' to 'htmlFor'
                 >
                   Amount (in Rs)
                 </label>

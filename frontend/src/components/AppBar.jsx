@@ -1,30 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from './Button';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { Button } from "./Button";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const AppBar = () => {
-  const [username, setUsername] = useState('');
-    const navigate = useNavigate();
-    const userInfoString = useSelector((store) => store.userInfo);
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+  const userInfoString = useSelector((store) => store.userInfo);
   const userInfo = userInfoString ? JSON.parse(userInfoString) : null; // Parse the JSON string
   const usern = userInfo ? userInfo.user : null;
   useEffect(() => {
-    
-  setUsername(usern);
-   
+    setUsername(usern);
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/signin')
-  }
+    navigate("/signin");
+  };
 
   return (
     <div className="shadow h-14 flex justify-between">
-      <div className="flex flex-col justify-center h-full ml-4">
-        PayTM App
-      </div>
+      <div className="flex flex-col justify-center h-full ml-4">PayTM App</div>
       <div className="flex">
         <div className="flex flex-col justify-center h-full mr-4">
           {username}
@@ -34,9 +30,13 @@ export const AppBar = () => {
             {username && username.charAt(0).toUpperCase()}
           </div>
         </div>
-        <button className='bg-black text-white rounded-lg p-2 m-2 ' onClick = {handleLogout}>Logout</button>
+        <button
+          className="bg-black text-white rounded-lg p-2 m-2 "
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
       </div>
-     
     </div>
   );
 };

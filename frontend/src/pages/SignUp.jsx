@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Heading } from "../components/Heading";
 import { SubHeading } from "../components/SubHeading";
 import { InputBox } from "../components/InputBox";
@@ -6,34 +6,42 @@ import { Button } from "../components/Button";
 import axios from "axios";
 import { BottomWarning } from "../components/BottomWarning";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-export const SignUp = () => {
+const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const response = await axios.post(
-      "http://localhost:3000/api/v1/user/signup",
-      {
-        username,
-        firstName,
-        lastName,
-        password,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
 
-    localStorage.setItem("token", response.data.token);
-    
-    alert("user signed");
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/signup",
+        {
+          username,
+          firstName,
+          lastName,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Navigate to sign-in and show success toast
+      localStorage.setItem("token", response.data.token);
+      toast.success("Registration successful!");
+      navigate("/signin");
+    } catch (error) {
+      // Show error notification
+      toast.error("Registration failed! Please try again.");
+    }
   };
 
   return (
@@ -42,7 +50,7 @@ export const SignUp = () => {
         <div className="rounded-lg bg-white w-100 text-center p-4 h-max px-8">
           <div className="mb-5">
             <Heading label={"Sign up"} />
-            <SubHeading label={"Enter your infromation to create an account"} />
+            <SubHeading label={"Enter your information to create an account"} />
           </div>
 
           <InputBox
@@ -70,6 +78,7 @@ export const SignUp = () => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            type="password"
             placeholder="123456"
             label={"Password"}
           />
