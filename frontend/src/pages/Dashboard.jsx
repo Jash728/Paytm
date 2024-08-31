@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { AppBar } from '../components/AppBar';
 import { Balance } from '../components/Balance';
 import Users from '../components/Users';
@@ -11,7 +11,6 @@ const Dashboard = () => {
   const userInfoString = useSelector((store) => store.userInfo);
   const userInfo = userInfoString ? JSON.parse(userInfoString) : null; // Parse the JSON string
   const token = userInfo ? userInfo.token : null;
-  console.log(userInfo);
   
   const getBalance = async () => {
     // const token = JSON.parse(localStorage.getItem('signedInUser')).token;
@@ -28,7 +27,6 @@ const Dashboard = () => {
         const data = await response.json();
         setBalance(data.balance);
       } else {
-        const errorData = await response.text();
         setError(`Error: ${response.statusText}`);
       }
     } catch (error) {
